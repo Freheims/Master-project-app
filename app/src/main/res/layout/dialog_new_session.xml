@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        >
+        <TextView
+            android:text="@string/new_session"
+            android:fontFamily="sans-serif-thin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="26sp"
+            android:layout_marginBottom="16dp"
+            />
+
+        <RelativeLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            >
+
+            <TextView
+                android:id="@+id/textView_newSessionName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:hint="@string/session_name"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="16dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/textView_newSessionUser"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView_newSessionName"
+                android:layout_marginTop="16dp"
+                android:hint="@string/session_user"
+                android:textSize="14sp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="16dp"
+                />
+            <Space
+                android:id="@+id/space_dialog"
+                android:layout_width="wrap_content"
+                android:layout_below="@+id/textView_newSessionUser"
+                android:layout_height="32dp" />
+
+            <Button
+                android:id="@+id/button_dialogCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/space_dialog"
+                android:layout_marginStart="4dp"
+                android:text="@string/cancel" />
+
+            <Button
+                android:id="@+id/button_dialogStartSession"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/start_session"
+                android:layout_alignBaseline="@+id/button_dialogCancel"
+                android:layout_alignBottom="@+id/button_dialogCancel"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="12dp" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
