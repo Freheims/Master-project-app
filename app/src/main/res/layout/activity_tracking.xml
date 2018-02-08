@@ -45,7 +45,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="28dp"
                 android:adjustViewBounds="false"
-                android:background="@android:color/darker_gray"
+                android:background="#aaaaaa"
                 app:srcCompat="@android:drawable/stat_sys_data_bluetooth" />
 
             <TextView
