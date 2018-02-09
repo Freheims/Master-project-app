@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/session_has_ended"
+            android:textSize="26sp" />
+
+
+        <TextView
+            android:id="@+id/text_sessionHasEnded"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/session_has_ended"
+            android:fontFamily="sans-serif-light"
+
+            />
+        <ProgressBar
+            android:id="@+id/progress_uploadSession"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            />
+        <ImageView
+            android:id="@+id/image_uploadCheck"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:background="@drawable/ic_check"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"
+            />
+        <TextView
+            android:id="@+id/text_uploadStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/uploading"
+            android:fontFamily="sans-serif-light"
+
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <Button
+                android:id="@+id/button_dialogFinishSession"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/finish"
+                android:backgroundTint="@color/colorAccentOpaque"
+                android:textColor="@android:color/white"
+                android:layout_centerHorizontal="true"
+                android:enabled="false"
+
+                />
+
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

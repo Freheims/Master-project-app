@@ -1,12 +1,26 @@
 <resources>
-    <string name="app_name">Master-project-app</string>
+    <string name="app_name">Firetracker</string>
     <string name="not_tracking">Not currently tracking</string>
     <string name="infotext">Press the Play-button\n to start a new tracking session</string>
     <string name="new_session">New session</string>
+
     <string name="session_name">Session name</string>
     <string name="session_user">Name of the session user</string>
     <string name="cancel">CANCEL</string>
     <string name="start_session">START SESSION</string>
     <string name="currently_tracking">Currently tracking</string>
-    <string name="infotext_session_user">Session user\n %1$s</string>
+    <string name="infotext_session_user">Session user:\n %1$s</string>
+
+    <string name="end_session_question_mark">End session?</string>
+    <string name="end_session">End session</string>
+    <string name="end_session_text_upload">Are you sure you want to end this session? This will also start the upload of the data to the server.</string>
+
+    <string name="session_has_ended">Session has ended</string>
+    <string name="session">Session </string>
+    <string name="has_ended"> has ended.</string>
+    <string name="uploading">Uploading session…</string>
+    <string name="upload_finished">The session has been uploaded!</string>
+    <string name="finish">Finish</string>
+
+
 </resources>
