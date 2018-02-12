@@ -75,10 +75,10 @@ public class TrackingActivity extends AppCompatActivity {
 
 
         //TODO figure out how to use ButterKnife for this
-        final EditText editTextNewSessionName = view.findViewById(R.id.editText_newSessionName);
-        final EditText editTextNewSessionUser =  view.findViewById(R.id.editText_newSessionUser);
-        Button buttonCancelStartSession = view.findViewById(R.id.button_dialogCancelStarSession);
-        Button buttonStartSession = view.findViewById(R.id.button_dialogStartSession);
+        final EditText editTextNewSessionName = (EditText) view.findViewById(R.id.editText_newSessionName);
+        final EditText editTextNewSessionUser =  (EditText) view.findViewById(R.id.editText_newSessionUser);
+        Button buttonCancelStartSession = (Button) view.findViewById(R.id.button_dialogCancelStarSession);
+        Button buttonStartSession = (Button) view.findViewById(R.id.button_dialogStartSession);
 
         buttonCancelStartSession.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,8 +118,8 @@ public class TrackingActivity extends AppCompatActivity {
 
 
         //TODO figure out how to use ButterKnife for this
-        Button buttonCancelStopSession = view.findViewById(R.id.button_dialogCancelStopSession);
-        Button buttonStopSession = view.findViewById(R.id.button_dialogStopSession);
+        Button buttonCancelStopSession = (Button) view.findViewById(R.id.button_dialogCancelStopSession);
+        Button buttonStopSession = (Button) view.findViewById(R.id.button_dialogStopSession);
 
         buttonCancelStopSession.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,11 +154,11 @@ public class TrackingActivity extends AppCompatActivity {
         View view = li.inflate(R.layout.dialog_upload_session, null);
         dialog.setView(view);
         //TODO figure out how to use ButterKnife for this
-        final Button buttonFinishSession = view.findViewById(R.id.button_dialogFinishSession);
-        final TextView textSessionHasEnded = view.findViewById(R.id.text_sessionHasEnded);
-        final TextView textUploadStatus = view.findViewById(R.id.text_uploadStatus);
-        final ProgressBar progressUploadSession = view.findViewById(R.id.progress_uploadSession);
-        final ImageView imageUploadCheck = view.findViewById(R.id.image_uploadCheck);
+        final Button buttonFinishSession = (Button) view.findViewById(R.id.button_dialogFinishSession);
+        final TextView textSessionHasEnded = (TextView) view.findViewById(R.id.text_sessionHasEnded);
+        final TextView textUploadStatus = (TextView) view.findViewById(R.id.text_uploadStatus);
+        final ProgressBar progressUploadSession = (ProgressBar) view.findViewById(R.id.progress_uploadSession);
+        final ImageView imageUploadCheck = (ImageView) view.findViewById(R.id.image_uploadCheck);
 
         textSessionHasEnded.setText(getResources().getString(R.string.session)  + " " + session.getSessionName() + " " + getResources().getString(R.string.has_ended));
 
