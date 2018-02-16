@@ -1,7 +1,7 @@
 package no.uib.master_project_app.models;
 
 /**
- * Created by moled on 09.02.2018.
+ * @author Edvard P. Bjørgen and Fredrik V. Heimsæter
  */
 
 public class User {
@@ -17,5 +17,12 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }

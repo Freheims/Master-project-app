@@ -26,12 +26,16 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.List;
 import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import no.uib.master_project_app.models.Datapoint;
 import no.uib.master_project_app.models.Ibeacon;
 import no.uib.master_project_app.models.User;
 import no.uib.master_project_app.models.Session;
@@ -118,7 +122,11 @@ public class TrackingActivity extends AppCompatActivity {
         public void onScanResult(int callbackType, ScanResult result) {
             try {
                 Ibeacon beacon = uuidConv.createIbeaconFromRecord(result.getScanRecord().getBytes());
-                Log.d("BEACON ", "RSSI: " + result.getRssi() + " UUID: " + beacon.getUuid() + " Major: " + beacon.getMajor() + " Minor: " + beacon.getMinor() + " Name: " + result.getDevice().getName());
+                if(beacon!=null) {
+                    long now = System.currentTimeMillis();
+                    session.addDataPoint(new Datapoint(beacon, now, result.getRssi()));
+                    Log.d("BEACON ", "RSSI: " + result.getRssi() + " UUID: " + beacon.getUuid() + " Major: " + beacon.getMajor() + " Minor: " + beacon.getMinor() + " Name: " + result.getDevice().getName());
+                }
 
             } catch (NullPointerException e){
                 Log.d("BLE Devices", "Name " + result.getDevice().getName() + " RSSI " + result.getRssi() + " Class: " + result.getDevice().getBluetoothClass());
@@ -337,6 +345,7 @@ public class TrackingActivity extends AppCompatActivity {
         textViewTrackingStatus.setText(R.string.currently_tracking);
         textViewTrackingTime.setText("00:00");
         textViewInfoText.setText(getString(R.string.infotext_session_user, newSession.getSessionPerson().getName()));
+        session = newSession;
         mHandler.post(scanRunnable);
 
     }
@@ -350,14 +359,11 @@ public class TrackingActivity extends AppCompatActivity {
         textViewInfoText.setText(getString(R.string.infotext));
         mHandler.removeCallbacks(scanRunnable);
         scanLeDevice(false);
-        //Todo: Write session somewhere
+        //Todo: Write session somewhere, for now we only log it
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String jsonOutput = gson.toJson(session);
+        System.out.print(jsonOutput);
 
     }
-
-    // Add listeners to buttons
-
-
-
-
 }
 

@@ -39,4 +39,13 @@ public class Ibeacon {
     public void setMinor(int minor) {
         this.minor = minor;
     }
+
+    @Override
+    public String toString() {
+        return "Ibeacon{" +
+                "Uuid='" + Uuid + '\'' +
+                ", major=" + major +
+                ", minor=" + minor +
+                '}';
+    }
 }
