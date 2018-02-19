@@ -124,7 +124,7 @@ public class TrackingActivity extends AppCompatActivity {
                 Ibeacon beacon = uuidConv.createIbeaconFromRecord(result.getScanRecord().getBytes());
                 if(beacon!=null) {
                     long now = System.currentTimeMillis();
-                    session.addDataPoint(new Datapoint(beacon, now, result.getRssi()));
+                    session.addDataPoint(new Datapoint(beacon.getUuid(), beacon.getMajor(), beacon.getMinor(), now, result.getRssi()));
                     Log.d("BEACON ", "RSSI: " + result.getRssi() + " UUID: " + beacon.getUuid() + " Major: " + beacon.getMajor() + " Minor: " + beacon.getMinor() + " Name: " + result.getDevice().getName());
                 }
 
@@ -235,7 +235,7 @@ public class TrackingActivity extends AppCompatActivity {
                 String sessionUser = editTextNewSessionUser.getText().toString();
 
                 User newUser = new User(sessionUser);
-                session = new Session(sessionName, newUser);
+                session = new Session(sessionName, newUser.getName());
 
                 startSession(session);
                 dialog.cancel();
@@ -344,8 +344,10 @@ public class TrackingActivity extends AppCompatActivity {
         fabSession.setImageDrawable(getDrawable(R.drawable.ic_stop));
         textViewTrackingStatus.setText(R.string.currently_tracking);
         textViewTrackingTime.setText("00:00");
-        textViewInfoText.setText(getString(R.string.infotext_session_user, newSession.getSessionPerson().getName()));
+        textViewInfoText.setText(getString(R.string.infotext_session_user, newSession.getSessionPerson()));
         session = newSession;
+        long startTime = System.currentTimeMillis();
+        session.setSessionStart(startTime);
         mHandler.post(scanRunnable);
 
     }
@@ -359,6 +361,8 @@ public class TrackingActivity extends AppCompatActivity {
         textViewInfoText.setText(getString(R.string.infotext));
         mHandler.removeCallbacks(scanRunnable);
         scanLeDevice(false);
+        long endTime = System.currentTimeMillis();
+        session.setSessionEnd(endTime);
         //Todo: Write session somewhere, for now we only log it
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String jsonOutput = gson.toJson(session);

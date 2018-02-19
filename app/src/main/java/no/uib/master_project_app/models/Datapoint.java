@@ -8,18 +8,18 @@ import java.io.Serializable;
  */
 
 public class Datapoint implements Serializable{
-    private Ibeacon beacon;
+    private String uuid;
+    private int major;
+    private int minor;
     private long timestamp;
     private int rssi;
 
-    public Datapoint(Ibeacon beacon, long timestamp, int rssi) {
-        this.beacon = beacon;
+    public Datapoint(String uuid, int major, int minor, long timestamp, int rssi) {
+        this.uuid = uuid;
+        this.major = major;
+        this.minor = minor;
         this.timestamp = timestamp;
         this.rssi = rssi;
-    }
-
-    public Ibeacon getBeacon() {
-        return beacon;
     }
 
     public long getTimestamp() {
@@ -33,7 +33,9 @@ public class Datapoint implements Serializable{
     @Override
     public String toString() {
         return "Datapoint{" +
-                "beacon=" + beacon +
+                "uuid='" + uuid + '\'' +
+                ", major=" + major +
+                ", minor=" + minor +
                 ", timestamp=" + timestamp +
                 ", rssi=" + rssi +
                 '}';
