@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -39,6 +40,8 @@ import no.uib.master_project_app.models.Datapoint;
 import no.uib.master_project_app.models.Ibeacon;
 import no.uib.master_project_app.models.User;
 import no.uib.master_project_app.models.Session;
+import no.uib.master_project_app.util.AccelerometerListener;
+import no.uib.master_project_app.util.AccelerometerManager;
 import no.uib.master_project_app.util.UuidConverter;
 
 
@@ -46,7 +49,7 @@ import no.uib.master_project_app.util.UuidConverter;
  * Activity for tracking the user
  * @author Fredrik V. Heimsæter and Edvard P. Bjørgen
  */
-public class TrackingActivity extends AppCompatActivity {
+public class TrackingActivity extends AppCompatActivity implements AccelerometerListener {
 
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning = false;
@@ -79,6 +82,14 @@ public class TrackingActivity extends AppCompatActivity {
         askForLocationPermission();
 
         initGui();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (AccelerometerManager.isSupported(this)) {
+            AccelerometerManager.startListening(this);
+        }
     }
 
     private void askForLocationPermission() {
@@ -369,5 +380,47 @@ public class TrackingActivity extends AppCompatActivity {
         System.out.print(jsonOutput);
 
     }
+
+    @Override
+    public void onAccelerationChanged(float x, float y, float z) {
+        System.out.println("value x: "+ x + " value y: " + y + " value z: " + z);
+    }
+
+    @Override
+    public void onShake(float force) {
+        Toast.makeText(this, "Motion detected", Toast.LENGTH_SHORT).show();
+        System.out.println("value force: " + (int) force);
+
+    }
+
+
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        //Check device supported Accelerometer senssor or not
+        if (AccelerometerManager.isListening()) {
+
+            //Start Accelerometer Listening
+            AccelerometerManager.stopListening();
+
+            Toast.makeText(this, "onStop Accelerometer Stopped", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (AccelerometerManager.isListening()) {
+            AccelerometerManager.stopListening();
+
+            Toast.makeText(this, "onDestroy Accelerometer Stopped", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }
+
 
