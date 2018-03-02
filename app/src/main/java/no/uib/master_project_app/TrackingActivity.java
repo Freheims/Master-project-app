@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Random;
 
@@ -70,6 +71,10 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
 
     Session session;
 
+    float movementX;
+    float movementY;
+    float forceValue;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +92,7 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
     @Override
     protected void onResume() {
         super.onResume();
-        if (AccelerometerManager.isSupported(this)) {
+        if (AccelerometerManager.isSupported(this) && inSession) {
             AccelerometerManager.startListening(this);
         }
     }
@@ -128,7 +133,7 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
     private ScanCallback mLeScanCallback = new ScanCallback() {
 
 
-
+        //Data is stored on every update here
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             try {
@@ -137,6 +142,9 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
                     long now = System.currentTimeMillis();
                     session.addDataPoint(new Datapoint(beacon.getUuid(), beacon.getMajor(), beacon.getMinor(), now, result.getRssi()));
                     Log.d("BEACON ", "RSSI: " + result.getRssi() + " UUID: " + beacon.getUuid() + " Major: " + beacon.getMajor() + " Minor: " + beacon.getMinor() + " Name: " + result.getDevice().getName());
+/*
+                    System.out.println("BEACON " + "RSSI: " + result.getRssi() + " UUID: " + beacon.getUuid() + " Major: " + beacon.getMajor() + " Minor: " + beacon.getMinor() + " Name: " + result.getDevice().getName()  + " Movement(?):  " + getMovementValue() + " applied force: " + getForceValue());
+*/
                 }
 
             } catch (NullPointerException e){
@@ -359,6 +367,9 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         session = newSession;
         long startTime = System.currentTimeMillis();
         session.setSessionStart(startTime);
+        if (AccelerometerManager.isSupported(this)) {
+            AccelerometerManager.startListening(this);}
+
         mHandler.post(scanRunnable);
 
     }
@@ -372,6 +383,13 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         textViewInfoText.setText(getString(R.string.infotext));
         mHandler.removeCallbacks(scanRunnable);
         scanLeDevice(false);
+
+
+        if (AccelerometerManager.isListening()) {
+            AccelerometerManager.stopListening();
+
+            Toast.makeText(this, "onDestroy Accelerometer Stopped", Toast.LENGTH_SHORT).show();
+        }
         long endTime = System.currentTimeMillis();
         session.setSessionEnd(endTime);
         //Todo: Write session somewhere, for now we only log it
@@ -383,14 +401,37 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
 
     @Override
     public void onAccelerationChanged(float x, float y, float z) {
-        System.out.println("value x: "+ x + " value y: " + y + " value z: " + z);
+        movementX = x;
+        movementY = y;
+
+     System.out.println("ACCEL CHANGED: X " + x + "| Y " + y + "| Z " + z);
+        DecimalFormat df = new DecimalFormat("#.00");
+        textViewTrackingTime.setText("ACCEL CHANGED: X " + df.format(x) + "| Y " + df.format(y) + "| Z " + df.format(z));
+
+/*
+        System.out.println("FORCE: " + forceValue);
+*/
     }
 
     @Override
     public void onShake(float force) {
         Toast.makeText(this, "Motion detected", Toast.LENGTH_SHORT).show();
-        System.out.println("value force: " + (int) force);
+/*
+        System.out.println("value force: " + force);
+*/
+        forceValue = force;
 
+    }
+
+    private int getMovementValue() {
+
+        return (int) (movementX + movementY);
+
+    }
+
+    private int getForceValue() {
+
+        return (int) forceValue;
     }
 
 
@@ -414,7 +455,7 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (AccelerometerManager.isListening()) {
+        if (AccelerometerManager.isListening() && inSession) {
             AccelerometerManager.stopListening();
 
             Toast.makeText(this, "onDestroy Accelerometer Stopped", Toast.LENGTH_SHORT).show();

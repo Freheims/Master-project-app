@@ -18,10 +18,11 @@ public class AccelerometerManager {
     /**
      * Accuracy configuration
      */
-    private static float threshold = 15.0f;
-    private static int interval = 200;
+    private static float threshold = 0.0f;
+    private static int interval = 900;
 
     private static Sensor sensor;
+    private static Sensor linearSensor;
     private static SensorManager sensorManager;
     // you could use an OrientationListener array instead
     // if you plans to use more than one listener
@@ -104,11 +105,15 @@ public class AccelerometerManager {
 
         // Take all sensors in device
         List<Sensor> sensors = sensorManager.getSensorList(
-                Sensor.TYPE_ACCELEROMETER);
+                Sensor.TYPE_ROTATION_VECTOR);
 
-        if (sensors.size() > 0) {
+        List<Sensor> linearSensors = sensorManager.getSensorList(
+                Sensor.TYPE_LINEAR_ACCELERATION);
+
+        if (sensors.size() > 0 || linearSensors.size() > 0) {
 
             sensor = sensors.get(0);
+            linearSensor = linearSensors.get(0);
 
             // Register Accelerometer Listener
             running = sensorManager.registerListener(
