@@ -8,6 +8,10 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -50,7 +54,7 @@ import no.uib.master_project_app.util.UuidConverter;
  * Activity for tracking the user
  * @author Fredrik V. Heimsæter and Edvard P. Bjørgen
  */
-public class TrackingActivity extends AppCompatActivity implements AccelerometerListener {
+public class TrackingActivity extends AppCompatActivity implements AccelerometerListener, SensorEventListener {
 
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning = false;
@@ -74,6 +78,10 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
     float movementX;
     float movementY;
     float forceValue;
+    private long steps = 0;
+
+    private SensorManager sManager;
+    private Sensor stepSensor;
 
 
     @Override
@@ -84,9 +92,21 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         BluetoothManager bluetoothManager = (BluetoothManager) this.getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
 
+        initStepSensor();
+
         askForLocationPermission();
 
         initGui();
+    }
+
+    private void initStepSensor() {
+        sManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        stepSensor = sManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+        System.out.println("SENSOR OBJECT: " + stepSensor);
+        /*List<Sensor> sensor = sManager.getSensorList(
+                Sensor.TYPE_STEP_DETECTOR);
+
+        stepSensor = sensor.get(0);*/
     }
 
     @Override
@@ -94,6 +114,10 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         super.onResume();
         if (AccelerometerManager.isSupported(this) && inSession) {
             AccelerometerManager.startListening(this);
+
+            sManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_FASTEST);
+
+
         }
     }
 
@@ -142,9 +166,7 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
                     long now = System.currentTimeMillis();
                     session.addDataPoint(new Datapoint(beacon.getUuid(), beacon.getMajor(), beacon.getMinor(), now, result.getRssi()));
                     Log.d("BEACON ", "RSSI: " + result.getRssi() + " UUID: " + beacon.getUuid() + " Major: " + beacon.getMajor() + " Minor: " + beacon.getMinor() + " Name: " + result.getDevice().getName());
-/*
-                    System.out.println("BEACON " + "RSSI: " + result.getRssi() + " UUID: " + beacon.getUuid() + " Major: " + beacon.getMajor() + " Minor: " + beacon.getMinor() + " Name: " + result.getDevice().getName()  + " Movement(?):  " + getMovementValue() + " applied force: " + getForceValue());
-*/
+                    System.out.println("BEACON " + "RSSI: " + result.getRssi() + " UUID: " + beacon.getUuid() + " Major: " + beacon.getMajor() + " Minor: " + beacon.getMinor() + " Name: " + result.getDevice().getName()  + " steps: " + steps);
                 }
 
             } catch (NullPointerException e){
@@ -404,22 +426,13 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         movementX = x;
         movementY = y;
 
-     System.out.println("ACCEL CHANGED: X " + x + "| Y " + y + "| Z " + z);
         DecimalFormat df = new DecimalFormat("#.00");
         textViewTrackingTime.setText("ACCEL CHANGED: X " + df.format(x) + "| Y " + df.format(y) + "| Z " + df.format(z));
 
-/*
-        System.out.println("FORCE: " + forceValue);
-*/
     }
 
     @Override
     public void onShake(float force) {
-        Toast.makeText(this, "Motion detected", Toast.LENGTH_SHORT).show();
-/*
-        System.out.println("value force: " + force);
-*/
-        forceValue = force;
 
     }
 
@@ -435,6 +448,26 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
     }
 
 
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        Sensor sensor = event.sensor;
+        float[] values = event.values;
+        System.out.println("EVENT SENESFORCHANGED");
+        int value = -1;
+
+        if (values.length > 0) {
+            value = (int) values[0];
+        }
+        Toast.makeText(this, "Sensor has changed", Toast.LENGTH_SHORT).show();
+
+
+        if (sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
+            steps++;
+            System.out.println("step added " + steps);
+            textViewTrackingStatus.setText("Steps" + Long.toString(steps));
+            Toast.makeText(this, "Steps has increased: " + steps, Toast.LENGTH_SHORT).show();
+        }
+    }
 
 
     @Override
@@ -446,8 +479,8 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
 
             //Start Accelerometer Listening
             AccelerometerManager.stopListening();
+            sManager.unregisterListener(this, stepSensor);
 
-            Toast.makeText(this, "onStop Accelerometer Stopped", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -457,11 +490,17 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         super.onDestroy();
         if (AccelerometerManager.isListening() && inSession) {
             AccelerometerManager.stopListening();
+            sManager.unregisterListener(this, stepSensor);
 
-            Toast.makeText(this, "onDestroy Accelerometer Stopped", Toast.LENGTH_SHORT).show();
         }
     }
 
+
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {}
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {}
 }
 
 
