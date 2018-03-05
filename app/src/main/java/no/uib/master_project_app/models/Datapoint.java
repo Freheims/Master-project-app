@@ -13,13 +13,15 @@ public class Datapoint implements Serializable{
     private int minor;
     private long timestamp;
     private int rssi;
+    private long steps;
 
-    public Datapoint(String uuid, int major, int minor, long timestamp, int rssi) {
+    public Datapoint(String uuid, int major, int minor, long timestamp, int rssi, long steps) {
         this.uuid = uuid;
         this.major = major;
         this.minor = minor;
         this.timestamp = timestamp;
         this.rssi = rssi;
+        this.steps = steps;
     }
 
     public long getTimestamp() {
@@ -38,6 +40,7 @@ public class Datapoint implements Serializable{
                 ", minor=" + minor +
                 ", timestamp=" + timestamp +
                 ", rssi=" + rssi +
+                ", steps=" + steps +
                 '}';
     }
 }

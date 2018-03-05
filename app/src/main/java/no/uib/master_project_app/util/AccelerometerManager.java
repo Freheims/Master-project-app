@@ -174,7 +174,6 @@ public class AccelerometerManager {
                 lastX = x;
                 lastY = y;
                 lastZ = z;
-                Toast.makeText(context, "No Motion detected", Toast.LENGTH_SHORT).show();
 
             } else {
                 timeDiff = now - lastUpdate;
@@ -187,10 +186,9 @@ public class AccelerometerManager {
 
                         if (now - lastShake >= interval) {
                             // trigger shake event
-                            listener.onShake(force);
+                            //listener.onShake(force);
                         } else {
-                            Toast.makeText(context, "No Motion detected",
-                                    Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(context, "No Motion detected", Toast.LENGTH_SHORT).show();
 
                         }
                         lastShake = now;
