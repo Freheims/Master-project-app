@@ -48,7 +48,13 @@ import no.uib.master_project_app.models.User;
 import no.uib.master_project_app.models.Session;
 import no.uib.master_project_app.util.AccelerometerListener;
 import no.uib.master_project_app.util.AccelerometerManager;
+import no.uib.master_project_app.util.ApiClient;
+import no.uib.master_project_app.util.ApiInterface;
 import no.uib.master_project_app.util.UuidConverter;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -341,9 +347,9 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         buttonStopSession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                stopSession();
+                String jsonSession = stopSession();
                 dialog.cancel();
-                openUploadDialog();
+                openUploadDialog(jsonSession);
 
 
             }
@@ -354,7 +360,7 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         dialog.setCancelable(true);
         dialog.show();
     }
-    public void openUploadDialog() {
+    public void openUploadDialog(String jsonSession) {
         final AlertDialog dialog = new AlertDialog.Builder(TrackingActivity.this)
                 .setView(R.layout.dialog_upload_session)
                 .create();
@@ -370,25 +376,24 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         final ImageView imageUploadCheck = (ImageView) view.findViewById(R.id.image_uploadCheck);
 
         textSessionHasEnded.setText(getResources().getString(R.string.session)  + " " + session.getSessionName() + " " + getResources().getString(R.string.has_ended));
-
-        //Only for mocking the GUI
-        new CountDownTimer(3000, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-            }
-
-            //When "upload" finishes, this happens
-            public void onFinish() {
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        Call<ResponseBody> call = apiService.createSession(session);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 progressUploadSession.setVisibility(View.GONE);
                 imageUploadCheck.setVisibility(View.VISIBLE);
 
                 textUploadStatus.setText(getResources().getString(R.string.upload_finished));
                 buttonFinishSession.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.blue));
                 buttonFinishSession.setEnabled(true);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
 
             }
-        }.start();
-
+        });
 
         buttonFinishSession.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -427,7 +432,7 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
 
     }
 
-    private void stopSession() {
+    private String stopSession() {
         inSession = false;
         relativeLayoutBtIconBg.setBackground(getDrawable(R.drawable.shape_circle_gray));
         fabSession.setImageDrawable(getDrawable(R.drawable.ic_play_arrow));
@@ -449,6 +454,7 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         String jsonOutput = gson.toJson(session);
         System.out.print(jsonOutput);
         steps = 0;
+        return jsonOutput;
 
     }
 

@@ -1,5 +1,7 @@
 package no.uib.master_project_app.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,10 +10,14 @@ import java.util.List;
  */
 
 public class Session {
+    @SerializedName("name")
     String sessionName;
+    @SerializedName("user")
     String sessionPerson;
     List<Datapoint> datapoints;
+    @SerializedName("starttime")
     long sessionStart;
+    @SerializedName("endtime")
     long sessionEnd;
 
     public Session(String sessionName, String sessionPerson) {
