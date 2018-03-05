@@ -1,5 +1,7 @@
 package no.uib.master_project_app.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -8,14 +10,23 @@ import java.io.Serializable;
  */
 
 public class Datapoint implements Serializable{
+    @SerializedName("uuid")
     private String uuid;
+    @SerializedName("major")
     private int major;
+    @SerializedName("minor")
     private int minor;
+    @SerializedName("timestamp")
     private long timestamp;
+    @SerializedName("rssi")
     private int rssi;
+    @SerializedName("steps")
     private long steps;
+    @SerializedName("rotationx")
     private float rotX;
+    @SerializedName("rotationy")
     private float rotY;
+    @SerializedName("rotationz")
     private float rotZ;
 
     public Datapoint(String uuid, int major, int minor, long timestamp, int rssi, long steps, float rotX, float rotY, float rotZ ) {
