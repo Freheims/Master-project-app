@@ -74,11 +74,12 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
 
     boolean inSession;
 
-    Session session;
+    private Session session;
 
-    float movementX;
-    float movementY;
-    float forceValue;
+    private float rotX;
+    private float rotY;
+    private float rotZ;
+
     private long steps = 0;
 
     private SensorManager sManager;
@@ -183,7 +184,7 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
                 Ibeacon beacon = uuidConv.createIbeaconFromRecord(result.getScanRecord().getBytes());
                 if(beacon!=null) {
                     long now = System.currentTimeMillis();
-                    session.addDataPoint(new Datapoint(beacon.getUuid(), beacon.getMajor(), beacon.getMinor(), now, result.getRssi(), steps));
+                    session.addDataPoint(new Datapoint(beacon.getUuid(), beacon.getMajor(), beacon.getMinor(), now, result.getRssi(), steps, rotX, rotY, rotZ));
                     //Log.d("BEACON ", "RSSI: " + result.getRssi() + " UUID: " + beacon.getUuid() + " Major: " + beacon.getMajor() + " Minor: " + beacon.getMinor() + " Name: " + result.getDevice().getName());
                     System.out.println("BEACON " + "RSSI: " + result.getRssi() + " UUID: " + beacon.getUuid() + " Major: " + beacon.getMajor() + " Minor: " + beacon.getMinor() + " Name: " + result.getDevice().getName()  + " steps: " + steps);
                 }
@@ -453,8 +454,9 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
 
     @Override
     public void onAccelerationChanged(float x, float y, float z) {
-        movementX = x;
-        movementY = y;
+        rotX = x;
+        rotY = y;
+        rotZ = z;
 
         DecimalFormat df = new DecimalFormat("#.00");
         textViewTrackingTime.setText("ACCEL CHANGED: X " + df.format(x) + "| Y " + df.format(y) + "| Z " + df.format(z));
