@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Firetracker</string>
+    <string name="app_name">FireTracker</string>
     <string name="not_tracking">Not currently tracking</string>
     <string name="infotext">Press the Play-button\n to start a new tracking session</string>
     <string name="new_session">New session</string>
