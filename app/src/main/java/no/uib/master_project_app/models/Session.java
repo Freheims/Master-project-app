@@ -10,14 +10,14 @@ import java.util.List;
  */
 
 public class Session {
-    @SerializedName("name")
+    @SerializedName("Name")
     String sessionName;
-    @SerializedName("user")
+    @SerializedName("User")
     String sessionPerson;
     List<Datapoint> datapoints;
-    @SerializedName("starttime")
+    @SerializedName("StartTime")
     long sessionStart;
-    @SerializedName("endtime")
+    @SerializedName("EndTime")
     long sessionEnd;
 
     public Session(String sessionName, String sessionPerson) {
