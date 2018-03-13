@@ -376,11 +376,25 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         final ImageView imageUploadCheck = (ImageView) view.findViewById(R.id.image_uploadCheck);
 
         textSessionHasEnded.setText(getResources().getString(R.string.session)  + " " + session.getSessionName() + " " + getResources().getString(R.string.has_ended));
+
+        createSession(dialog, buttonFinishSession, textUploadStatus, progressUploadSession, imageUploadCheck);
+
+
+
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
+    private void createSession(final AlertDialog dialog, final Button buttonFinishSession, final TextView textUploadStatus, final ProgressBar progressUploadSession, final ImageView imageUploadCheck) {
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         Call<ResponseBody> call = apiService.createSession(session);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                setUiState();
+            }
+
+            private void setUiState() {
                 progressUploadSession.setVisibility(View.GONE);
                 imageUploadCheck.setVisibility(View.VISIBLE);
 
@@ -403,11 +417,6 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
 
             }
         });
-
-
-
-        dialog.setCancelable(true);
-        dialog.show();
     }
 
     private void startSession(Session newSession) {

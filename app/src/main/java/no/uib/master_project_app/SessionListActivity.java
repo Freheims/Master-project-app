@@ -1,5 +1,7 @@
 package no.uib.master_project_app;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -28,12 +30,14 @@ public class SessionListActivity extends AppCompatActivity {
 
     @BindView(R.id.listview_session) ListView listViewSessions;
     SessionListViewAdapter sessionListViewAdapter;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session_list);
         ButterKnife.bind(this);
+        context = getApplicationContext();
 
         initGui();
         getSessions();
@@ -50,8 +54,7 @@ public class SessionListActivity extends AppCompatActivity {
                 if (response.code() == 200) {
                     System.out.println(response.body());
                     //EventBus.getDefault().post(new SessionListEvent(response.body()));
-                    sessionListViewAdapter = new SessionListViewAdapter(getApplicationContext(), R.layout.list_element_session, response.body());
-                    listViewSessions.setAdapter(sessionListViewAdapter);
+                    initListViewSessions(response.body());
                 }
             }
 
@@ -79,11 +82,16 @@ public class SessionListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //TODO: Go to next activity and send the session object with it
+                Session session = sessionListViewAdapter.getItem(i);
+                Intent intent = new Intent(context, TrackingActivity.class);
+                intent.putExtra("SessionId", session.getSessionId());
+                startActivity(intent);
+
             }
         });
     }
     private void initListViewSessions(List<Session> sessions) {
-        sessionListViewAdapter = new SessionListViewAdapter(getApplicationContext(), R.layout.list_element_session, sessions);
+        sessionListViewAdapter = new SessionListViewAdapter(context, R.layout.list_element_session, sessions);
         listViewSessions.setAdapter(sessionListViewAdapter);
 
     }

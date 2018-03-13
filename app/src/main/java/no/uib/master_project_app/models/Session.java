@@ -10,6 +10,8 @@ import java.util.List;
  */
 
 public class Session {
+    @SerializedName("ID")
+    int sessionId;
     @SerializedName("Name")
     String sessionName;
     @SerializedName("User")
@@ -24,6 +26,10 @@ public class Session {
         this.sessionName = sessionName;
         this.sessionPerson = sessionPerson;
         datapoints = new ArrayList<>();
+    }
+
+    public int getSessionId() {
+        return sessionId;
     }
 
     public String getSessionName() {
