@@ -15,16 +15,17 @@ public class Session {
     @SerializedName("Name")
     String sessionName;
     @SerializedName("User")
-    String sessionPerson;
+    String sessionUser;
+    @SerializedName("Datapoints")
     List<Datapoint> datapoints;
     @SerializedName("StartTime")
     long sessionStart;
     @SerializedName("EndTime")
     long sessionEnd;
 
-    public Session(String sessionName, String sessionPerson) {
+    public Session(String sessionName, String sessionUser) {
         this.sessionName = sessionName;
-        this.sessionPerson = sessionPerson;
+        this.sessionUser = sessionUser;
         datapoints = new ArrayList<>();
     }
 
@@ -40,12 +41,12 @@ public class Session {
         this.sessionName = sessionName;
     }
 
-    public String getSessionPerson() {
-        return sessionPerson;
+    public String getSessionUser() {
+        return sessionUser;
     }
 
-    public void setSessionPerson(String sessionPerson) {
-        this.sessionPerson = sessionPerson;
+    public void setSessionUser(String sessionUser) {
+        this.sessionUser = sessionUser;
     }
 
     public long getSessionStart() {
@@ -76,7 +77,7 @@ public class Session {
     public String toString() {
         return "Session{" +
                 "sessionName='" + sessionName + '\'' +
-                ", sessionPerson=" + sessionPerson +
+                ", sessionUser=" + sessionUser +
                 ", datapoints=" + datapoints +
                 ", sessionStart=" + sessionStart +
                 ", sessionEnd=" + sessionEnd +

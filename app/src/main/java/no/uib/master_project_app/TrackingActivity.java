@@ -12,7 +12,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -96,7 +95,8 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
     private int countdown = 5;
     private double threshold = 1.5;
     private double prevY;
-
+    int currentSessionId;
+    Session currentSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,11 +107,40 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         mBluetoothAdapter = bluetoothManager.getAdapter();
         //keeps the screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
+        initGui();
+        currentSessionId = getExtras();
+        setCurrentSessionFromId();
 
         askForLocationPermission();
         initStepSensor();
-        initGui();
+    }
+
+    private void setCurrentSessionFromId() {
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        Call<Session> call = apiService.getSessionFromId(currentSessionId);
+        call.enqueue(new Callback<Session>() {
+            @Override
+            public void onResponse(Call<Session> call, Response<Session> response) {
+                if (response.code() == 200) {
+                    System.out.println(response.body());
+                    //EventBus.getDefault().post(new SessionListEvent(response.body()));
+                    currentSession = response.body();
+                    fabSession.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Session> call, Throwable t) {
+                System.out.println(t);
+
+            }
+        });
+    }
+
+
+    private int getExtras() {
+        Bundle extras = getIntent().getExtras();
+        return extras.getInt("SessionId");
     }
 
     private void initStepSensor() {
@@ -253,12 +282,12 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
      * Initializes the GUI
      */
     public void initGui() {
+        fabSession.setEnabled(false);
     }
 
     @OnClick(R.id.floatingActionButton_session)
     public void performAction(){
         if (!inSession) {
-            inSession = true;
             openStartSessionDialog();
         } else if (inSession) {
             openStopSessionDialog();
@@ -276,17 +305,19 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
 
 
         //TODO figure out how to use ButterKnife for this
-        final EditText editTextNewSessionName = (EditText) view.
-                findViewById(R.id.editText_newSessionName);
+        final EditText editTextNewSessionName = (EditText) view.findViewById(R.id.editText_newSessionName);
         final EditText editTextNewSessionUser =  (EditText) view.findViewById(R.id.editText_newSessionUser);
+        editTextNewSessionName.setText(currentSession.getSessionName());
+        editTextNewSessionUser.setText(currentSession.getSessionUser());
+        editTextNewSessionName.setEnabled(false);
+        editTextNewSessionUser.setEnabled(false);
+
+
         Button buttonCancelStartSession = (Button) view.findViewById(R.id.button_dialogCancelStarSession);
         Button buttonStartSession = (Button) view.findViewById(R.id.button_dialogStartSession);
 
-
-        //FOR TESTING ONLY
-        Random random = new Random();
-        editTextNewSessionName.setText("TestSession" + random.nextInt());
-        editTextNewSessionUser.setText("TestUser" + random.nextInt());
+        dialog.setCancelable(true);
+        dialog.show();
 
         buttonCancelStartSession.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -303,10 +334,11 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
 
                 if(checkIfBtIsOn()){
 
-                User newUser = new User(sessionUser);
-                session = new Session(sessionName, newUser.getName());
-                startSession(session);
-                dialog.cancel();
+                    User newUser = new User(sessionUser);
+                    session = new Session(sessionName, newUser.getName());
+                    inSession = true;
+                    startSession(session);
+                    dialog.cancel();
 
                 } else {
                     Toast.makeText(getApplicationContext(), "Bluetooth not activated", Toast.LENGTH_SHORT).show();
@@ -319,8 +351,7 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
 
 
 
-        dialog.setCancelable(true);
-        dialog.show();
+
     }
     public void openStopSessionDialog() {
         final AlertDialog dialog = new AlertDialog.Builder(TrackingActivity.this)
@@ -385,6 +416,8 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         dialog.show();
     }
 
+
+    //TODO: Refactor this into updateSession()
     private void createSession(final AlertDialog dialog, final Button buttonFinishSession, final TextView textUploadStatus, final ProgressBar progressUploadSession, final ImageView imageUploadCheck) {
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         Call<ResponseBody> call = apiService.createSession(session);
@@ -426,7 +459,7 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         fabSession.setImageDrawable(getDrawable(R.drawable.ic_stop));
         textViewTrackingStatus.setText(R.string.currently_tracking);
         textViewTrackingTime.setText("00:00");
-        textViewInfoText.setText(getString(R.string.infotext_session_user, newSession.getSessionPerson()));
+        textViewInfoText.setText(getString(R.string.infotext_session_user, newSession.getSessionUser()));
         session = newSession;
         long startTime = System.currentTimeMillis();
         session.setSessionStart(startTime);

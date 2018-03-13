@@ -1,12 +1,15 @@
 <resources>
     <string name="app_name">FireTracker</string>
+    <string name="select_session">Select a session</string>
+
+
     <string name="not_tracking">Not currently tracking</string>
-    <string name="infotext">Press the Play-button\n to start a new tracking session</string>
-    <string name="new_session">New session</string>
+    <string name="infotext">Press the Play-button\n to start a tracking session</string>
+    <string name="new_session">Start session</string>
 
     <string name="session_name">Session name</string>
     <string name="session_user">Name of the session user</string>
-    <string name="cancel">CANCEL</string>
+    <string name="cancel">Cancel</string>
     <string name="start_session">START SESSION</string>
     <string name="currently_tracking">Currently tracking</string>
     <string name="infotext_session_user">Session user:\n %1$s</string>
@@ -21,6 +24,7 @@
     <string name="uploading">Uploading session…</string>
     <string name="upload_finished">The session has been uploaded!</string>
     <string name="finish">Finish</string>
+
 
 
 </resources>

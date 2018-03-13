@@ -7,6 +7,7 @@ import no.uib.master_project_app.models.Session;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -23,4 +24,7 @@ public interface ApiInterface {
 
     @GET("raw/sessions")
     Call<List<Session>> getSessions();
+
+    @GET("raw/session/{sessionid}")
+    Call<Session> getSessionFromId(@Path ("sessionid") int sessionId);
 }
