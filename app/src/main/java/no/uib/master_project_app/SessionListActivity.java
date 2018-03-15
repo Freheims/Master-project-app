@@ -40,21 +40,19 @@ public class SessionListActivity extends AppCompatActivity {
         context = getApplicationContext();
 
         initGui();
-        getSessions();
+        getSessionsByStatus();
         initListeners();
     }
 
-    private void getSessions() {
+    private void getSessionsByStatus() {
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        Call<List<Session>> call = apiService.getSessions();
-        System.out.println("getSessions");
+        Call<List<Session>> call = apiService.getSessionsByStatus(false);
+        System.out.println("getAllSessions");
         call.enqueue(new Callback<List<Session>>() {
             @Override
             public void onResponse(Call<List<Session>> call, Response<List<Session>> response) {
                 if (response.code() == 200) {
-                    System.out.println(response.body());
-                    //EventBus.getDefault().post(new SessionListEvent(response.body()));
-                    initListViewSessions(response.body());
+                    EventBus.getDefault().post(new SessionListEvent(response.body()));
                 }
             }
 
@@ -69,6 +67,20 @@ public class SessionListActivity extends AppCompatActivity {
 
     private void initGui() {
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+        getSessionsByStatus();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

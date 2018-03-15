@@ -22,12 +22,19 @@ public class Session {
     long sessionStart;
     @SerializedName("EndTime")
     long sessionEnd;
+    @SerializedName("Finished")
+    boolean finished;
+    @SerializedName("Map")
+    String mapUrl;
+
 
     public Session(String sessionName, String sessionUser) {
         this.sessionName = sessionName;
         this.sessionUser = sessionUser;
         datapoints = new ArrayList<>();
     }
+
+    //curl --data 'Name=Eventbusio&&User=legen&Datapoints=[]&StartTime=0&EndTime=0&Finished=1&Map=s' http://firetracker.freheims.xyz:8000/session
 
     public int getSessionId() {
         return sessionId;
@@ -71,6 +78,18 @@ public class Session {
 
     public void addDataPoint(Datapoint datapoint) {
         datapoints.add(datapoint);
+    }
+
+    public boolean isFinished() {
+        return finished;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
+    }
+
+    public String getMapUrl() {
+        return mapUrl;
     }
 
     @Override

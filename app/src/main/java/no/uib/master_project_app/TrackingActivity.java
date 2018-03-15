@@ -7,6 +7,7 @@ import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -36,7 +37,6 @@ import com.google.gson.GsonBuilder;
 
 import java.text.DecimalFormat;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,7 +50,6 @@ import no.uib.master_project_app.util.AccelerometerManager;
 import no.uib.master_project_app.util.ApiClient;
 import no.uib.master_project_app.util.ApiInterface;
 import no.uib.master_project_app.util.UuidConverter;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -79,7 +78,7 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
 
     boolean inSession;
 
-    private Session session;
+
 
     private float rotX;
     private float rotY;
@@ -96,7 +95,9 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
     private double threshold = 1.5;
     private double prevY;
     int currentSessionId;
-    Session currentSession;
+
+    private Session sessionFromDb;
+    Session thisSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +125,8 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
                 if (response.code() == 200) {
                     System.out.println(response.body());
                     //EventBus.getDefault().post(new SessionListEvent(response.body()));
-                    currentSession = response.body();
+                    sessionFromDb = response.body();
+                    thisSession = sessionFromDb;
                     fabSession.setEnabled(true);
                 }
             }
@@ -219,7 +221,7 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
                 Ibeacon beacon = uuidConv.createIbeaconFromRecord(result.getScanRecord().getBytes());
                 if(beacon!=null) {
                     long now = System.currentTimeMillis();
-                    session.addDataPoint(new Datapoint(beacon.getUuid(), beacon.getMajor(), beacon.getMinor(), now, result.getRssi(), steps, rotX, rotY, rotZ));
+                    thisSession.addDataPoint(new Datapoint(beacon.getUuid(), beacon.getMajor(), beacon.getMinor(), now, result.getRssi(), steps, rotX, rotY, rotZ));
                     //Log.d("BEACON ", "RSSI: " + result.getRssi() + " UUID: " + beacon.getUuid() + " Major: " + beacon.getMajor() + " Minor: " + beacon.getMinor() + " Name: " + result.getDevice().getName());
                     System.out.println("BEACON " + "RSSI: " + result.getRssi() + " UUID: " + beacon.getUuid() + " Major: " + beacon.getMajor() + " Minor: " + beacon.getMinor() + " Name: " + result.getDevice().getName()  + " steps: " + steps);
                 }
@@ -307,8 +309,8 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         //TODO figure out how to use ButterKnife for this
         final EditText editTextNewSessionName = (EditText) view.findViewById(R.id.editText_newSessionName);
         final EditText editTextNewSessionUser =  (EditText) view.findViewById(R.id.editText_newSessionUser);
-        editTextNewSessionName.setText(currentSession.getSessionName());
-        editTextNewSessionUser.setText(currentSession.getSessionUser());
+        editTextNewSessionName.setText(thisSession.getSessionName());
+        editTextNewSessionUser.setText(thisSession.getSessionUser());
         editTextNewSessionName.setEnabled(false);
         editTextNewSessionUser.setEnabled(false);
 
@@ -335,9 +337,10 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
                 if(checkIfBtIsOn()){
 
                     User newUser = new User(sessionUser);
-                    session = new Session(sessionName, newUser.getName());
+                    //sessionFromDb = new Session(sessionName, newUser.getName());
+
                     inSession = true;
-                    startSession(session);
+                    startSession(thisSession);
                     dialog.cancel();
 
                 } else {
@@ -406,9 +409,9 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         final ProgressBar progressUploadSession = (ProgressBar) view.findViewById(R.id.progress_uploadSession);
         final ImageView imageUploadCheck = (ImageView) view.findViewById(R.id.image_uploadCheck);
 
-        textSessionHasEnded.setText(getResources().getString(R.string.session)  + " " + session.getSessionName() + " " + getResources().getString(R.string.has_ended));
+        textSessionHasEnded.setText(getResources().getString(R.string.session)  + " " + thisSession.getSessionName() + " " + getResources().getString(R.string.has_ended));
 
-        createSession(dialog, buttonFinishSession, textUploadStatus, progressUploadSession, imageUploadCheck);
+        updateSession(dialog, buttonFinishSession, textUploadStatus, progressUploadSession, imageUploadCheck);
 
 
 
@@ -417,14 +420,18 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
     }
 
 
-    //TODO: Refactor this into updateSession()
-    private void createSession(final AlertDialog dialog, final Button buttonFinishSession, final TextView textUploadStatus, final ProgressBar progressUploadSession, final ImageView imageUploadCheck) {
+    private void updateSession(final AlertDialog dialog, final Button buttonFinishSession, final TextView textUploadStatus, final ProgressBar progressUploadSession, final ImageView imageUploadCheck) {
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        Call<ResponseBody> call = apiService.createSession(session);
-        call.enqueue(new Callback<ResponseBody>() {
+        thisSession.setFinished(true);
+        Call<Void> call = apiService.updateSession(thisSession, currentSessionId);
+        call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                setUiState();
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.code() == 200){
+                setUiState();}
+                else {
+                    System.out.println(response.code());
+                }
             }
 
             private void setUiState() {
@@ -437,8 +444,9 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+            public void onFailure(Call<Void> call, Throwable t) {
+                System.out.println(t);
+                System.out.println("call:" +call);
             }
         });
 
@@ -446,6 +454,10 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
             @Override
             public void onClick(View view) {
                 dialog.cancel();
+                Intent intent = new Intent(getApplicationContext(), SessionListActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+
 
 
             }
@@ -460,9 +472,9 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         textViewTrackingStatus.setText(R.string.currently_tracking);
         textViewTrackingTime.setText("00:00");
         textViewInfoText.setText(getString(R.string.infotext_session_user, newSession.getSessionUser()));
-        session = newSession;
+        //sessionFromDb = newSession;
         long startTime = System.currentTimeMillis();
-        session.setSessionStart(startTime);
+        newSession.setSessionStart(startTime);
 
         if (AccelerometerManager.isSupported(this) && sManager != null) {
             AccelerometerManager.startListening(this);
@@ -490,10 +502,10 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
             sManager.unregisterListener(this, stepSensor);
         }
         long endTime = System.currentTimeMillis();
-        session.setSessionEnd(endTime);
-        //Todo: Write session somewhere, for now we only log it
+        thisSession.setSessionEnd(endTime);
+        //Todo: Write sessionFromDb somewhere, for now we only log it
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String jsonOutput = gson.toJson(session);
+        String jsonOutput = gson.toJson(thisSession);
         System.out.print(jsonOutput);
         steps = 0;
         return jsonOutput;
