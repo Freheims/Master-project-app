@@ -10,23 +10,23 @@ import java.io.Serializable;
  */
 
 public class Datapoint implements Serializable{
-    @SerializedName("uuid")
+    @SerializedName("UUID")
     private String uuid;
-    @SerializedName("major")
+    @SerializedName("Major")
     private int major;
-    @SerializedName("minor")
+    @SerializedName("Minor")
     private int minor;
-    @SerializedName("timestamp")
+    @SerializedName("Timestamp")
     private long timestamp;
-    @SerializedName("rssi")
+    @SerializedName("RSSI")
     private int rssi;
-    @SerializedName("steps")
+    @SerializedName("Steps")
     private long steps;
-    @SerializedName("rotationx")
+    @SerializedName("RotationX")
     private float rotX;
-    @SerializedName("rotationy")
+    @SerializedName("RotationY")
     private float rotY;
-    @SerializedName("rotationz")
+    @SerializedName("RotationZ")
     private float rotZ;
 
     public Datapoint(String uuid, int major, int minor, long timestamp, int rssi, long steps, float rotX, float rotY, float rotZ ) {

@@ -10,20 +10,34 @@ import java.util.List;
  */
 
 public class Session {
-    @SerializedName("name")
+    @SerializedName("ID")
+    int sessionId;
+    @SerializedName("Name")
     String sessionName;
-    @SerializedName("user")
-    String sessionPerson;
+    @SerializedName("User")
+    String sessionUser;
+    @SerializedName("Datapoints")
     List<Datapoint> datapoints;
-    @SerializedName("starttime")
+    @SerializedName("StartTime")
     long sessionStart;
-    @SerializedName("endtime")
+    @SerializedName("EndTime")
     long sessionEnd;
+    @SerializedName("Finished")
+    boolean finished;
+    @SerializedName("Map")
+    String mapUrl;
 
-    public Session(String sessionName, String sessionPerson) {
+
+    public Session(String sessionName, String sessionUser) {
         this.sessionName = sessionName;
-        this.sessionPerson = sessionPerson;
+        this.sessionUser = sessionUser;
         datapoints = new ArrayList<>();
+    }
+
+    //curl --data 'Name=Eventbusio&&User=legen&Datapoints=[]&StartTime=0&EndTime=0&Finished=1&Map=s' http://firetracker.freheims.xyz:8000/session
+
+    public int getSessionId() {
+        return sessionId;
     }
 
     public String getSessionName() {
@@ -34,12 +48,12 @@ public class Session {
         this.sessionName = sessionName;
     }
 
-    public String getSessionPerson() {
-        return sessionPerson;
+    public String getSessionUser() {
+        return sessionUser;
     }
 
-    public void setSessionPerson(String sessionPerson) {
-        this.sessionPerson = sessionPerson;
+    public void setSessionUser(String sessionUser) {
+        this.sessionUser = sessionUser;
     }
 
     public long getSessionStart() {
@@ -66,11 +80,23 @@ public class Session {
         datapoints.add(datapoint);
     }
 
+    public boolean isFinished() {
+        return finished;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
+    }
+
+    public String getMapUrl() {
+        return mapUrl;
+    }
+
     @Override
     public String toString() {
         return "Session{" +
                 "sessionName='" + sessionName + '\'' +
-                ", sessionPerson=" + sessionPerson +
+                ", sessionUser=" + sessionUser +
                 ", datapoints=" + datapoints +
                 ", sessionStart=" + sessionStart +
                 ", sessionEnd=" + sessionEnd +
