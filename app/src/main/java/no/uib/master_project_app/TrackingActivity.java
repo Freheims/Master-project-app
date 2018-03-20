@@ -96,7 +96,6 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
     private double prevY;
     int currentSessionId;
 
-    private Session sessionFromDb;
     Session thisSession;
 
     @Override
@@ -125,8 +124,7 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
                 if (response.code() == 200) {
                     System.out.println(response.body());
                     //EventBus.getDefault().post(new SessionListEvent(response.body()));
-                    sessionFromDb = response.body();
-                    thisSession = sessionFromDb;
+                    thisSession = response.body();
                     fabSession.setEnabled(true);
                 }
             }
