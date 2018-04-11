@@ -219,7 +219,7 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
                 Ibeacon beacon = uuidConv.createIbeaconFromRecord(result.getScanRecord().getBytes());
                 if(beacon!=null) {
                     long now = System.currentTimeMillis();
-                    thisSession.addDataPoint(new Datapoint(beacon.getUuid(), beacon.getMajor(), beacon.getMinor(), now, result.getRssi(), steps, rotX, rotY, rotZ));
+                    thisSession.addDataPoint(new Datapoint(beacon.getUuid(), Integer.toString(beacon.getMajor()), Integer.toString(beacon.getMinor()), now, result.getRssi(), steps, rotX, rotY, rotZ));
                     //Log.d("BEACON ", "RSSI: " + result.getRssi() + " UUID: " + beacon.getUuid() + " Major: " + beacon.getMajor() + " Minor: " + beacon.getMinor() + " Name: " + result.getDevice().getName());
                     System.out.println("BEACON " + "RSSI: " + result.getRssi() + " UUID: " + beacon.getUuid() + " Major: " + beacon.getMajor() + " Minor: " + beacon.getMinor() + " Name: " + result.getDevice().getName()  + " steps: " + steps);
                 }

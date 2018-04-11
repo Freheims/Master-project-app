@@ -13,9 +13,9 @@ public class Datapoint implements Serializable{
     @SerializedName("UUID")
     private String uuid;
     @SerializedName("Major")
-    private int major;
+    private String major;
     @SerializedName("Minor")
-    private int minor;
+    private String minor;
     @SerializedName("Timestamp")
     private long timestamp;
     @SerializedName("RSSI")
@@ -29,7 +29,7 @@ public class Datapoint implements Serializable{
     @SerializedName("RotationZ")
     private float rotZ;
 
-    public Datapoint(String uuid, int major, int minor, long timestamp, int rssi, long steps, float rotX, float rotY, float rotZ ) {
+    public Datapoint(String uuid, String major, String minor, long timestamp, int rssi, long steps, float rotX, float rotY, float rotZ ) {
         this.uuid = uuid;
         this.major = major;
         this.minor = minor;

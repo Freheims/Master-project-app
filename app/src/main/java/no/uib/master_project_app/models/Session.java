@@ -26,6 +26,8 @@ public class Session {
     boolean finished;
     @SerializedName("Map")
     String mapUrl;
+    @SerializedName("Beacons")
+    List<Beacon> beacons;
 
 
     public Session(String sessionName, String sessionUser) {
