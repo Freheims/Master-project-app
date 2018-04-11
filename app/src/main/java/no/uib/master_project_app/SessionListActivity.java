@@ -2,6 +2,7 @@ package no.uib.master_project_app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +13,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,6 +31,7 @@ public class SessionListActivity extends AppCompatActivity {
 
 
     @BindView(R.id.listview_session) ListView listViewSessions;
+    @BindView(R.id.swiperefresh) SwipeRefreshLayout swipeRefreshLayout;
     SessionListViewAdapter sessionListViewAdapter;
     Context context;
 
@@ -66,8 +69,28 @@ public class SessionListActivity extends AppCompatActivity {
 
 
     private void initGui() {
+    /*
+ * Sets up a SwipeRefreshLayout.OnRefreshListener that is invoked when the user
+ * performs a swipe-to-refresh gesture.
+ */
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
 
+                        // This method performs the actual data-refresh operation.
+                        // The method calls setRefreshing(false) when it's finished.
+                        refreshSessions();
+                    }
+                }
+        );
     }
+
+    private void refreshSessions() {
+        getSessionsByStatus();
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
 
     @Override
     protected void onResume() {
@@ -103,6 +126,7 @@ public class SessionListActivity extends AppCompatActivity {
         });
     }
     private void initListViewSessions(List<Session> sessions) {
+        Collections.reverse(sessions);
         sessionListViewAdapter = new SessionListViewAdapter(context, R.layout.list_element_session, sessions);
         listViewSessions.setAdapter(sessionListViewAdapter);
 

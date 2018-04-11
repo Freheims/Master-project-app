@@ -64,7 +64,7 @@ public class SessionListViewAdapter extends ArrayAdapter<Session> {
 
             holder.textViewSessionName = (TextView) row.findViewById(R.id.textview_session_name);
             holder.textViewSessionUser = (TextView) row.findViewById(R.id.textview_session_user);
-            holder.textViewDateTime = (TextView) row.findViewById(R.id.textview_date_time);
+            //holder.textViewDateTime = (TextView) row.findViewById(R.id.textview_date_time);
 
             row.setTag(holder);
         } else {
@@ -72,16 +72,16 @@ public class SessionListViewAdapter extends ArrayAdapter<Session> {
             holder = (UserHolder) row.getTag();
         }
         holder.textViewSessionName.setText("Session name: " + sessions.get(position).getSessionName());
-        holder.textViewSessionUser.setText("Session user: " + sessions.get(position).getSessionName());
+        holder.textViewSessionUser.setText("Session user: " + sessions.get(position).getSessionUser());
         //holder.textViewDateTime.setText("Time: " + sessions.get(position).getSessionStart());
         return row;
     }
-
+cd..
 
     static class UserHolder {
         TextView textViewSessionName;
         TextView textViewSessionUser;
-        TextView textViewDateTime;
+        //TextView textViewDateTime;
     }
 
 }

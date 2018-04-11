@@ -33,18 +33,8 @@
             android:layout_alignWithParentIfMissing="true"
             android:text="Session user: USER"
             android:fontFamily="sans-serif-light"
-            android:textSize="12sp"
+            android:textSize="16sp"
             android:layout_below="@id/textview_session_name"
-            />
-        <TextView
-            android:id="@+id/textview_date_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignWithParentIfMissing="true"
-            android:text="Mon 00:00 01/01/1970"
-            android:fontFamily="sans-serif-light"
-            android:textSize="12sp"
-            android:layout_below="@id/textview_session_user"
             />
     </RelativeLayout>
 </FrameLayout>
