@@ -76,7 +76,6 @@ public class SessionListViewAdapter extends ArrayAdapter<Session> {
         //holder.textViewDateTime.setText("Time: " + sessions.get(position).getSessionStart());
         return row;
     }
-cd..
 
     static class UserHolder {
         TextView textViewSessionName;
