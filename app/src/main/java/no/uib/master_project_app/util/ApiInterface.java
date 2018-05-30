@@ -24,17 +24,17 @@ public interface ApiInterface {
     @POST("session")
     Call<ResponseBody> createSession(@Body Session session);
 
-    @GET("raw/sessions")
+    @GET("sessions")
     Call<List<Session>> getAllSessions();
 
-    @GET("raw/session/{sessionid}")
+    @GET("session/{sessionid}")
     Call<Session> getSessionFromId(@Path ("sessionid") int sessionId);
 
     @FormUrlEncoded
-    @POST("raw/sessions")
+    @POST("sessions")
     Call<List<Session>> getSessionsByStatus(@Field("Finished") boolean status);
 
 
-    @PUT("raw/session/{sessionid}")
+    @PUT("session/{sessionid}")
     Call<Void> updateSession(@Body Session session, @Path ("sessionid") int sessionId);
 }
