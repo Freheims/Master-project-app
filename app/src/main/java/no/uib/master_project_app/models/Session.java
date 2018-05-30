@@ -79,6 +79,9 @@ public class Session {
     }
 
     public void addDataPoint(Datapoint datapoint) {
+        if(datapoints == null){
+            datapoints = new ArrayList<Datapoint>();
+        }
         datapoints.add(datapoint);
     }
 
