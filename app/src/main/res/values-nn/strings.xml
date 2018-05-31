@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FireTracker</string>
+    <string name="select_session">Vel ei økt</string>
+    <string name="not_tracking">Sporar ikkje</string>
+    <string name="infotext">Trykk på Play-knappen for å starte ei sporingsøkt</string>
+    <string name="new_session">Start økt</string>
+    <string name="session_name">Namn på økt</string>
+    <string name="session_user">Namn på brukaren av økta</string>
+    <string name="cancel">Avbryt</string>
+    <string name="start_session">START ØKT</string>
+    <string name="currently_tracking">Sporar</string>
+    <string name="end_session_question_mark">Avslutt økt?</string>
+    <string name="end_session">Avslutt økt</string>
+    <string name="end_session_text_upload">Er du sikker på at du vil avslutte økta? Dette vil òg starte opplasting av data til serveren.</string>
+    <string name="session_has_ended">Økta er avslutta</string>
+    <string name="session">Økt</string>
+    <string name="has_ended">er avslutta.</string>
+    <string name="uploading">Lastar opp økt…</string>
+    <string name="upload_finished">Økta har blitt lasta opp!</string>
+    <string name="finish">Fullfør</string>
+    <string name="infotext_session_user">Brukar av økta:\n %1$s</string>
+</resources>
