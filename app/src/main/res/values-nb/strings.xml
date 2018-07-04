@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">FireTracker</string>
+    <string name="app_name_stylized">fireTracker</string>
+
     <string name="cancel">Avbryt</string>
     <string name="currently_tracking">Sporer</string>
     <string name="end_session">Avslutt økt</string>
@@ -20,4 +22,5 @@
     <string name="start_session">START ØKT</string>
     <string name="upload_finished">Økta har blitt lasta opp!</string>
     <string name="uploading">Laster opp økt…</string>
+    <string name="open">Åpne</string>
 </resources>

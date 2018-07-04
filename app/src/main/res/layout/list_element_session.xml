@@ -4,37 +4,82 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="200dp"
     android:orientation="vertical"
     android:layout_marginTop="20dp"
     android:layout_marginBottom="20dp"
-    android:id="@+id/listContent">
+    android:id="@+id/listContent"
+
+    >
 
     <RelativeLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp"
+        android:background="@drawable/shape_rounded_card"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:elevation="2dp"
+        android:layout_margin="8dp"
+
 
         >
+        <ImageView
+            android:contentDescription="@string/currently_tracking"
+            android:id="@+id/imgview_session_map_img"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/shape_circle_gray"
+            />
+        <RelativeLayout
+            android:id="@+id/rellayout_list_element"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toEndOf="@id/imgview_session_map_img"
+            android:layout_margin="8dp"
+            >
 
-        <TextView
-            android:id="@+id/textview_session_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignWithParentIfMissing="true"
-            android:text="Session: SESSIONNAME"
-            android:fontFamily="sans-serif-light"
-            android:textSize="20sp"
-            />
-        <TextView
-            android:id="@+id/textview_session_user"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignWithParentIfMissing="true"
-            android:text="Session user: USER"
-            android:fontFamily="sans-serif-light"
-            android:textSize="16sp"
-            android:layout_below="@id/textview_session_name"
-            />
+            <TextView
+                android:id="@+id/textview_session_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Session: SESSIONNAME"
+                android:fontFamily="sans-serif-light"
+                android:textSize="20sp"
+                />
+            <TextView
+                android:id="@+id/textview_session_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Session user: USER"
+                android:fontFamily="sans-serif-light"
+                android:textSize="16sp"
+                android:layout_below="@id/textview_session_name"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#e7e7e7"
+                android:layout_above="@+id/text_open"
+                android:layout_margin="8dp"
+                />
+                <TextView
+                    android:id="@+id/text_open"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/open"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorAccent"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textSize="18sp"
+                    android:paddingEnd="16dp"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+
+                    />
+        </RelativeLayout>
     </RelativeLayout>
 </FrameLayout>

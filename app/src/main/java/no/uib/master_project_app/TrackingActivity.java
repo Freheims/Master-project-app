@@ -9,6 +9,8 @@ import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -21,6 +23,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -47,6 +50,7 @@ import no.uib.master_project_app.models.User;
 import no.uib.master_project_app.models.Session;
 import no.uib.master_project_app.util.AccelerometerListener;
 import no.uib.master_project_app.util.AccelerometerManager;
+import no.uib.master_project_app.util.Animations;
 import no.uib.master_project_app.util.ApiClient;
 import no.uib.master_project_app.util.ApiInterface;
 import no.uib.master_project_app.util.UuidConverter;
@@ -68,6 +72,7 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1;
     UuidConverter uuidConv = new UuidConverter();
 
+    @BindView(R.id.rellayout_tracking) RelativeLayout rellayoutTracking;
 
     @BindView(R.id.textView_trackingStatus) TextView textViewTrackingStatus;
     @BindView(R.id.textView_trackingTime) TextView textViewTrackingTime;
@@ -95,6 +100,9 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
     private double threshold = 1.5;
     private double prevY;
     int currentSessionId;
+
+    int screenHeight;
+    Animations anim = new Animations();
 
     Session thisSession;
 
@@ -126,6 +134,7 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
                     //EventBus.getDefault().post(new SessionListEvent(response.body()));
                     thisSession = response.body();
                     fabSession.setEnabled(true);
+                    fabSession.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getApplicationContext(),R.color.blue)));
                 }
             }
 
@@ -282,7 +291,17 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
      * Initializes the GUI
      */
     public void initGui() {
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenHeight = size.y;
+
+        rellayoutTracking.setTranslationY(screenHeight);
+
+        anim.moveViewToTranslationY(rellayoutTracking, 300 , anim.getShortAnimTime(this), 0, false);
+
         fabSession.setEnabled(false);
+        fabSession.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.red)));
     }
 
     @OnClick(R.id.floatingActionButton_session)
@@ -455,6 +474,7 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
                 Intent intent = new Intent(getApplicationContext(), SessionListActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
 
 
@@ -589,6 +609,23 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
     public void onAccuracyChanged(Sensor sensor, int i) {}
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {}
+
+    public void onBackPressed() {
+        anim.moveViewToTranslationY(rellayoutTracking, 0 , anim.getShortAnimTime(this), screenHeight, false);
+
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                TrackingActivity.super.onBackPressed();
+
+                overridePendingTransition(0, 0);
+
+            }
+        }, anim.getShortAnimTime(this));
+
+    }
 }
 
 

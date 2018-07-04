@@ -5,39 +5,67 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="no.uib.master_project_app.SessionListActivity"
-    android:padding="16dp">
+    android:padding="0dp"
+    android:background="@color/colorPrimary"
+    >
     <RelativeLayout
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="68dp"
+        android:background="@color/colorPrimary"
         >
-        <ImageView
-            android:id="@+id/image_logo"
+        <TextView
+            android:id="@+id/title_fire_part"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-
-            android:background="@drawable/logo_fire_tracker"
+            android:text="fire"
+            android:textColor="@android:color/white"
+            android:textSize="28sp"
+            android:fontFamily="sans-serif-thin"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="7dp"
             />
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/image_logo"
+            android:text="Tracker"
+            android:textColor="@android:color/white"
+            android:textSize="28sp"
+            android:fontFamily="sans-serif-light"
+            android:layout_toRightOf="@id/title_fire_part"
+            android:layout_marginTop="7dp"
+
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rellayout_select_session"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:background="@drawable/shape_rounded_top"
+        android:layout_marginTop="-20dp"
+        android:elevation="3dp"
+        >
+        <TextView
+            android:id="@+id/select_session_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_session"
+            android:fontFamily="sans-serif-black"
+            android:textSize="36sp"
             android:layout_margin="16dp"
 
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/select_session_text"
+
+
             >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:text="@string/select_session"
-                    android:textSize="24sp"
-                    />
+
                 <android.support.v4.widget.SwipeRefreshLayout
                     xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/swiperefresh"
@@ -47,10 +75,16 @@
                     <ListView
                         android:id="@+id/listview_session"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:divider="@null"
+                        android:dividerHeight="0dp"
+                        android:listSelector="@android:color/transparent"
+                        >
+
+
+                    </ListView>
                 </android.support.v4.widget.SwipeRefreshLayout>
             </LinearLayout>
-        </android.support.v7.widget.CardView>
     </RelativeLayout>
 
 </RelativeLayout>

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">FireTracker</string>
+    <string name="app_name_stylized">fireTracker</string>
     <string name="select_session">Select a session</string>
 
 
@@ -24,7 +25,7 @@
     <string name="uploading">Uploading session…</string>
     <string name="upload_finished">The session has been uploaded!</string>
     <string name="finish">Finish</string>
-
+    <string name="open">Open</string>
 
 
 </resources>
