@@ -26,16 +26,25 @@
         <ImageView
             android:contentDescription="@string/currently_tracking"
             android:id="@+id/imgview_session_map_img"
-            android:layout_width="100dp"
+            android:layout_width="128dp"
             android:layout_height="match_parent"
             android:src="@drawable/shape_circle_gray"
             />
+        <View
+            android:layout_width="16dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:layout_toRightOf="@+id/imgview_session_map_img"
+            android:layout_marginLeft="-16dp"
+            />
+
         <RelativeLayout
             android:id="@+id/rellayout_list_element"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toEndOf="@id/imgview_session_map_img"
-            android:layout_margin="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
             >
 
             <TextView
