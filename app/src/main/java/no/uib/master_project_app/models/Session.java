@@ -105,6 +105,7 @@ public class Session {
                 ", datapoints=" + datapoints +
                 ", sessionStart=" + sessionStart +
                 ", sessionEnd=" + sessionEnd +
+                ", mapUrl=" + mapUrl +
                 '}';
     }
 }

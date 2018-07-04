@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">FireTracker</string>
+    <string name="app_name_stylized">fireTracker</string>
     <string name="select_session">Vel ei økt</string>
     <string name="not_tracking">Sporar ikkje</string>
     <string name="infotext">Trykk på Play-knappen for å starte ei sporingsøkt</string>
@@ -20,4 +21,5 @@
     <string name="upload_finished">Økta har blitt lasta opp!</string>
     <string name="finish">Fullfør</string>
     <string name="infotext_session_user">Brukar av økta:\n %1$s</string>
+    <string name="open">Opne</string>
 </resources>

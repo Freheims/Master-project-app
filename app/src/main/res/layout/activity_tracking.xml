@@ -1,38 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="no.uib.master_project_app.TrackingActivity">
+    tools:context="no.uib.master_project_app.TrackingActivity"
+    android:background="@color/colorPrimary"
+    >
+    <RelativeLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:background="@color/colorPrimary"
 
+        >
+        <TextView
+            android:id="@+id/title_fire_part"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="fire"
+            android:textColor="@android:color/white"
+            android:textSize="28sp"
+            android:fontFamily="sans-serif-thin"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="7dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tracker"
+            android:textColor="@android:color/white"
+            android:textSize="28sp"
+            android:fontFamily="sans-serif-light"
+            android:layout_toRightOf="@id/title_fire_part"
+            android:layout_marginTop="7dp"
+
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rellayout_tracking"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:background="@drawable/shape_rounded_top"
+        android:layout_marginTop="-20dp"
+        android:elevation="3dp"
+        android:padding="16dp"
+        android:clipToPadding="false"
+
+        >
+
+
+        <TextView
+            android:id="@+id/textView_trackingStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="32sp"
+            android:text="@string/not_tracking"
+            android:fontFamily="sans-serif-black"
+            android:layout_marginBottom="16dp"
+            />
 
         <RelativeLayout
+            android:id="@+id/rellayout_inner_card"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textView_trackingStatus"
+            android:background="@drawable/shape_rounded_card"
+            android:elevation="2dp"
+            android:clipToPadding="false"
+            android:layout_marginBottom="32dp"
 
-
-            <TextView
-                android:id="@+id/textView_trackingStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="16dp"
-                android:textSize="24sp"
-                android:text="@string/not_tracking"
-                android:fontFamily="sans-serif-light"
-                />
+            >
 
             <TextView
                 android:id="@+id/textView_trackingTime"
-                android:layout_below="@+id/textView_trackingStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
-                android:textSize="24sp"
-                android:text="00:00"
                 android:fontFamily="sans-serif-light"
+                android:text="00:00"
+                android:textSize="24sp"
 
                 />
 
@@ -40,47 +91,50 @@
                 android:id="@+id/relLayout_btIcon_bg"
                 android:layout_width="250dp"
                 android:layout_height="250dp"
-                android:background="@drawable/shape_circle_gray"
-                android:elevation="2dp"
                 android:layout_centerInParent="true"
                 android:layout_marginBottom="16dp"
-                >
-            <ImageView
-                android:id="@+id/imageView_bluetoothLogo"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_marginTop="28dp"
-                android:layout_centerInParent="true"
-                android:background="@drawable/ic_bluetooth_white"
+                android:background="@drawable/shape_circle_gray"
+                android:elevation="3dp">
 
-                />
+                <ImageView
+                    android:id="@+id/imageView_bluetoothLogo"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="28dp"
+                    android:background="@drawable/ic_bluetooth_white"
+
+                    />
+
             </RelativeLayout>
+
             <TextView
                 android:id="@+id/textView_infotext_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/relLayout_btIcon_bg"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="28dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="sans-serif-light"
                 android:lines="2"
                 android:text="@string/infotext"
                 android:textAlignment="center"
-                android:textSize="24sp"
-                android:layout_above="@id/floatingActionButton_session"
-                android:fontFamily="sans-serif-light"
-                android:layout_marginBottom="16dp"
-                />
+                android:textSize="24sp" />
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/floatingActionButton_session"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="16dp"
-                android:layout_alignParentBottom="true"
-                android:src="@drawable/ic_play_arrow"
-                />
 
         </RelativeLayout>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/floatingActionButton_session"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_play_arrow"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            android:elevation="10dp"
+            />
 
 
-</android.support.constraint.ConstraintLayout>
+
+    </RelativeLayout>
+</RelativeLayout>

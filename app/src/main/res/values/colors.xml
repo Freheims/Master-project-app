@@ -5,11 +5,14 @@
     <color name="colorAccent">#2e82ff</color>
     <color name="colorDarkerGray">#AAAAAA</color>
 
+    <color name="colorBodyWhite">#f4f4f4</color>
+
     <color name="colorAccentOpaque">#7b2e82ff</color>
 
 
     <color name="green">#76A463</color>
     <color name="red">#ff4141</color>
+    <color name="navigation_bar">#5e3901</color>
 
 
 </resources>
