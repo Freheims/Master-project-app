@@ -536,8 +536,8 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         rotY = y;
         rotZ = z;
 
-        DecimalFormat df = new DecimalFormat("#.00");
-        textViewTrackingTime.setText("ACCEL CHANGED: X " + df.format(x) + "| Y " + df.format(y) + "| Z " + df.format(z));
+       // DecimalFormat df = new DecimalFormat("#.00");
+        //textViewTrackingTime.setText("ACCEL CHANGED: X " + df.format(x) + "| Y " + df.format(y) + "| Z " + df.format(z));
 
     }
 
