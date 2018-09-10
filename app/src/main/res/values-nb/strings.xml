@@ -23,4 +23,6 @@
     <string name="upload_finished">Økta har blitt lasta opp!</string>
     <string name="uploading">Laster opp økt…</string>
     <string name="open">Åpne</string>
+    <string name="upload_failed">Det oppstod en feil og økten ble ikke lastet opp. Vennligst prøv igjen.</string>
+    <string name="retry">Prøv igjen</string>
 </resources>

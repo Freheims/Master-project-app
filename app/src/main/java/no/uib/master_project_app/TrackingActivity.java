@@ -16,6 +16,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -421,14 +422,16 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         dialog.setView(view);
         //TODO figure out how to use ButterKnife for this
         final Button buttonFinishSession = (Button) view.findViewById(R.id.button_dialogFinishSession);
+        final Button buttonRetryUploadSession = (Button) view.findViewById(R.id.button_dialogRetryUploadSession);
         final TextView textSessionHasEnded = (TextView) view.findViewById(R.id.text_sessionHasEnded);
         final TextView textUploadStatus = (TextView) view.findViewById(R.id.text_uploadStatus);
         final ProgressBar progressUploadSession = (ProgressBar) view.findViewById(R.id.progress_uploadSession);
         final ImageView imageUploadCheck = (ImageView) view.findViewById(R.id.image_uploadCheck);
+        final ImageView imageUploadFailed = (ImageView) view.findViewById(R.id.image_uploadFalse);
 
         textSessionHasEnded.setText(getResources().getString(R.string.session)  + " " + thisSession.getSessionName() + " " + getResources().getString(R.string.has_ended));
 
-        updateSession(dialog, buttonFinishSession, textUploadStatus, progressUploadSession, imageUploadCheck);
+        updateSession(dialog, buttonFinishSession, buttonRetryUploadSession, textUploadStatus, progressUploadSession, imageUploadCheck, imageUploadFailed);
 
 
 
@@ -437,7 +440,7 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
     }
 
 
-    private void updateSession(final AlertDialog dialog, final Button buttonFinishSession, final TextView textUploadStatus, final ProgressBar progressUploadSession, final ImageView imageUploadCheck) {
+    private void updateSession(final AlertDialog dialog, final Button buttonFinishSession, final Button buttonRetryUploadSession, final TextView textUploadStatus, final ProgressBar progressUploadSession, final ImageView imageUploadCheck, final ImageView imageUploadFailed) {
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         thisSession.setFinished(true);
         Call<Void> call = apiService.updateSession(thisSession, currentSessionId);
@@ -445,25 +448,40 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.code() == 200){
-                setUiState();}
+                setUiState(true);}
                 else {
                     System.out.println(response.code());
+                    setUiState(false);
                 }
             }
 
-            private void setUiState() {
+            private void setUiState(boolean uploaded) {
                 progressUploadSession.setVisibility(View.GONE);
-                imageUploadCheck.setVisibility(View.VISIBLE);
+                if(uploaded) {
+                    imageUploadFailed.setVisibility(View.GONE);
+                    buttonRetryUploadSession.setEnabled(false);
+                    buttonRetryUploadSession.setVisibility(View.GONE);
+                    imageUploadCheck.setVisibility(View.VISIBLE);
 
-                textUploadStatus.setText(getResources().getString(R.string.upload_finished));
-                buttonFinishSession.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.blue));
-                buttonFinishSession.setEnabled(true);
+                    textUploadStatus.setText(getResources().getString(R.string.upload_finished));
+                    buttonFinishSession.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.blue));
+                    buttonFinishSession.setEnabled(true);
+                } else{
+                    imageUploadFailed.setVisibility(View.VISIBLE);
+                    textUploadStatus.setText(R.string.upload_failed);
+                    buttonFinishSession.setVisibility(View.GONE);
+                    buttonRetryUploadSession.setVisibility(View.VISIBLE);
+                    buttonRetryUploadSession.setEnabled(true);
+
+
+                }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 System.out.println(t);
                 System.out.println("call:" +call);
+                setUiState(false);
             }
         });
 
@@ -475,9 +493,15 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
+        });
 
-
-
+        buttonRetryUploadSession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+                updateSession(dialog, buttonFinishSession, buttonRetryUploadSession, textUploadStatus, progressUploadSession, imageUploadCheck, imageUploadFailed);
+                dialog.show();
             }
         });
     }
