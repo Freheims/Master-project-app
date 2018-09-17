@@ -54,6 +54,7 @@ import no.uib.master_project_app.util.AccelerometerManager;
 import no.uib.master_project_app.util.Animations;
 import no.uib.master_project_app.util.ApiClient;
 import no.uib.master_project_app.util.ApiInterface;
+import no.uib.master_project_app.util.SessionSaver;
 import no.uib.master_project_app.util.UuidConverter;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -423,6 +424,7 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         //TODO figure out how to use ButterKnife for this
         final Button buttonFinishSession = (Button) view.findViewById(R.id.button_dialogFinishSession);
         final Button buttonRetryUploadSession = (Button) view.findViewById(R.id.button_dialogRetryUploadSession);
+        final Button buttonAbortUploadSession = (Button) view.findViewById(R.id.button_dialogAbortUploadSession);
         final TextView textSessionHasEnded = (TextView) view.findViewById(R.id.text_sessionHasEnded);
         final TextView textUploadStatus = (TextView) view.findViewById(R.id.text_uploadStatus);
         final ProgressBar progressUploadSession = (ProgressBar) view.findViewById(R.id.progress_uploadSession);
@@ -431,16 +433,16 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
 
         textSessionHasEnded.setText(getResources().getString(R.string.session)  + " " + thisSession.getSessionName() + " " + getResources().getString(R.string.has_ended));
 
-        updateSession(dialog, buttonFinishSession, buttonRetryUploadSession, textUploadStatus, progressUploadSession, imageUploadCheck, imageUploadFailed);
+        updateSession(dialog, buttonFinishSession, buttonRetryUploadSession, buttonAbortUploadSession, textUploadStatus, progressUploadSession, imageUploadCheck, imageUploadFailed);
 
 
 
-        dialog.setCancelable(true);
+        dialog.setCancelable(false);
         dialog.show();
     }
 
 
-    private void updateSession(final AlertDialog dialog, final Button buttonFinishSession, final Button buttonRetryUploadSession, final TextView textUploadStatus, final ProgressBar progressUploadSession, final ImageView imageUploadCheck, final ImageView imageUploadFailed) {
+    private void updateSession(final AlertDialog dialog, final Button buttonFinishSession, final Button buttonRetryUploadSession, final Button buttonAbortUploadSession, final TextView textUploadStatus, final ProgressBar progressUploadSession, final ImageView imageUploadCheck, final ImageView imageUploadFailed) {
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         thisSession.setFinished(true);
         Call<Void> call = apiService.updateSession(thisSession, currentSessionId);
@@ -461,6 +463,8 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
                     imageUploadFailed.setVisibility(View.GONE);
                     buttonRetryUploadSession.setEnabled(false);
                     buttonRetryUploadSession.setVisibility(View.GONE);
+                    buttonAbortUploadSession.setEnabled(false);
+                    buttonAbortUploadSession.setVisibility(View.GONE);
                     imageUploadCheck.setVisibility(View.VISIBLE);
 
                     textUploadStatus.setText(getResources().getString(R.string.upload_finished));
@@ -472,8 +476,8 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
                     buttonFinishSession.setVisibility(View.GONE);
                     buttonRetryUploadSession.setVisibility(View.VISIBLE);
                     buttonRetryUploadSession.setEnabled(true);
-
-
+                    buttonAbortUploadSession.setEnabled(true);
+                    buttonAbortUploadSession.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -500,8 +504,21 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
             @Override
             public void onClick(View view) {
                 dialog.cancel();
-                updateSession(dialog, buttonFinishSession, buttonRetryUploadSession, textUploadStatus, progressUploadSession, imageUploadCheck, imageUploadFailed);
+                updateSession(dialog, buttonFinishSession, buttonRetryUploadSession, buttonAbortUploadSession, textUploadStatus, progressUploadSession, imageUploadCheck, imageUploadFailed);
                 dialog.show();
+            }
+        });
+
+        buttonAbortUploadSession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO Implement save functionality
+                SessionSaver.saveSessionInSharedPreferences(getApplicationContext(), thisSession);
+                dialog.cancel();
+                Intent intent = new Intent(getApplicationContext(), SessionListActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
     }
