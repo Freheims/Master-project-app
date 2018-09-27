@@ -16,6 +16,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -101,6 +102,10 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
     private double prevY;
     int currentSessionId;
 
+    long milliSecondTime, startTime, timeBuff, updateTime = 0L ;
+    Handler handler;
+    int seconds, minutes, milliSeconds ;
+
     int screenHeight;
     Animations anim = new Animations();
 
@@ -113,6 +118,8 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         ButterKnife.bind(this);
         BluetoothManager bluetoothManager = (BluetoothManager) this.getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
+        handler = new Handler() ;
+
         //keeps the screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         initGui();
@@ -488,11 +495,12 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         relativeLayoutBtIconBg.setBackground(getDrawable(R.drawable.shape_circle_blue));
         fabSession.setImageDrawable(getDrawable(R.drawable.ic_stop));
         textViewTrackingStatus.setText(R.string.currently_tracking);
-        textViewTrackingTime.setText("00:00");
         textViewInfoText.setText(getString(R.string.infotext_session_user, newSession.getSessionUser()));
         //sessionFromDb = newSession;
-        long startTime = System.currentTimeMillis();
-        newSession.setSessionStart(startTime);
+
+        startTime = SystemClock.uptimeMillis();
+        handler.postDelayed(runnable, 0);
+        newSession.setSessionStart(System.currentTimeMillis());
 
         if (AccelerometerManager.isSupported(this) && sManager != null) {
             AccelerometerManager.startListening(this);
@@ -509,10 +517,10 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         relativeLayoutBtIconBg.setBackground(getDrawable(R.drawable.shape_circle_gray));
         fabSession.setImageDrawable(getDrawable(R.drawable.ic_play_arrow));
         textViewTrackingStatus.setText(R.string.not_tracking);
-        textViewTrackingTime.setText("00:00");
         textViewInfoText.setText(getString(R.string.infotext));
         mHandler.removeCallbacks(scanRunnable);
         scanLeDevice(false);
+        handler.removeCallbacks(runnable);
 
 
         if (AccelerometerManager.isListening() && sManager != null) {
@@ -529,6 +537,29 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         return jsonOutput;
 
     }
+    public Runnable runnable = new Runnable() {
+
+        public void run() {
+
+            milliSecondTime = SystemClock.uptimeMillis() - startTime;
+
+            updateTime = timeBuff + milliSecondTime;
+
+            seconds = (int) (updateTime / 1000);
+
+            minutes = seconds / 60;
+
+            seconds = seconds % 60;
+
+            milliSeconds = (int) (updateTime % 1000);
+
+            textViewTrackingTime.setText("" + minutes + ":"
+                    + String.format("%02d", seconds));
+
+            handler.postDelayed(this, 0);
+        }
+
+    };
 
     @Override
     public void onAccelerationChanged(float x, float y, float z) {
