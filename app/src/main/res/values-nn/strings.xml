@@ -22,4 +22,6 @@
     <string name="finish">Fullfør</string>
     <string name="infotext_session_user">Brukar av økta:\n %1$s</string>
     <string name="open">Opne</string>
+    <string name="upload_failed">Det har oppstått ein feil pg økta vart ikkje lasta opp. Venlegst prøv igjen.</string>
+    <string name="retry">Prøv igjen</string>
 </resources>

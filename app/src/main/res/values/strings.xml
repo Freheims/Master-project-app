@@ -26,6 +26,9 @@
     <string name="upload_finished">The session has been uploaded!</string>
     <string name="finish">Finish</string>
     <string name="open">Open</string>
+    <string name="upload_failed">An error occured and the session was not uploaded. Please try again.</string>
+    <string name="retry">Try again</string>
+    <string name="abort">Abort session</string>
 
 
 </resources>
