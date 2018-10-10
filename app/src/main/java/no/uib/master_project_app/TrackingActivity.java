@@ -476,6 +476,7 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
 
                     textUploadStatus.setText(getResources().getString(R.string.upload_finished));
                     buttonFinishSession.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.blue));
+                    buttonFinishSession.setVisibility(View.VISIBLE);
                     buttonFinishSession.setEnabled(true);
                 } else{
                     imageUploadFailed.setVisibility(View.VISIBLE);
