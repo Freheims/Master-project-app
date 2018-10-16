@@ -25,4 +25,6 @@
     <string name="open">Åpne</string>
     <string name="upload_failed">Det oppstod en feil og økten ble ikke lastet opp. Vennligst prøv igjen.</string>
     <string name="retry">Prøv igjen</string>
+    <string name="abort">Avbryt økt</string>
+    <string name="stepcount">Skritteller</string>
 </resources>
