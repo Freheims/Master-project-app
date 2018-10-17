@@ -24,4 +24,6 @@
     <string name="open">Opne</string>
     <string name="upload_failed">Det har oppstått ein feil pg økta vart ikkje lasta opp. Venlegst prøv igjen.</string>
     <string name="retry">Prøv igjen</string>
+    <string name="abort">Avbryt økt</string>
+    <string name="stepcount">Skrittellar:</string>
 </resources>

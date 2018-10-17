@@ -642,7 +642,7 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
                 countdown = 22;
             if((Math.abs(prevY - gravity[1]) > threshold) && !ignore){
                 steps++;
-                textViewTrackingStatus.setText("Step Count: " + steps);
+                textViewTrackingStatus.setText(getString(R.string.stepcount) + steps);
 
                 ignore = true;
             }

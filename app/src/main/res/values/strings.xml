@@ -29,6 +29,7 @@
     <string name="upload_failed">An error occured and the session was not uploaded. Please try again.</string>
     <string name="retry">Try again</string>
     <string name="abort">Abort session</string>
+    <string name="stepcount">Step Count:</string>
 
 
 </resources>
