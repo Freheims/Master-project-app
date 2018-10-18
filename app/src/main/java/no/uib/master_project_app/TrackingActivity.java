@@ -5,7 +5,10 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanSettings;
+import android.bluetooth.le.ScanFilter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -41,6 +44,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -68,7 +72,9 @@ import retrofit2.Response;
  */
 public class TrackingActivity extends AppCompatActivity implements AccelerometerListener, SensorEventListener {
 
+    List<ScanFilter> filterList;
     private BluetoothAdapter mBluetoothAdapter;
+    ScanSettings scanSettings;
     private boolean mScanning = false;
     private Handler mHandler = new Handler();
     private final int SCAN_PERIOD = 20000;
@@ -120,7 +126,12 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
         ButterKnife.bind(this);
         BluetoothManager bluetoothManager = (BluetoothManager) this.getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
+        scanSettings = new ScanSettings.Builder()
+        .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+                .build();
         handler = new Handler() ;
+
+        filterList =  new ArrayList<>();
 
         //keeps the screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -278,7 +289,7 @@ public class TrackingActivity extends AppCompatActivity implements Accelerometer
                 }
             }, SCAN_PERIOD);*/
             mScanning = true;
-            bluetoothLeScanner.startScan(mLeScanCallback);
+            bluetoothLeScanner.startScan(filterList, scanSettings, mLeScanCallback);
 
 
 
