@@ -9,7 +9,7 @@
     <string name="end_session_question_mark">Avslutt økt?</string>
     <string name="end_session_text_upload">Er du sikker på at du vil avslutte økta? Dette vil òg starte opplasting av data til serveren.</string>
     <string name="finish">Fullfør</string>
-    <string name="has_ended">er avslutta/</string>
+    <string name="has_ended">er avslutta.</string>
     <string name="infotext">Trykk på Play-knappen for å starte ei sporingsøkt</string>
     <string name="infotext_session_user">Bruker av økta:\n %1$s</string>
     <string name="new_session">Start økt</string>
@@ -26,5 +26,5 @@
     <string name="upload_failed">Det oppstod en feil og økten ble ikke lastet opp. Vennligst prøv igjen.</string>
     <string name="retry">Prøv igjen</string>
     <string name="abort">Avbryt økt</string>
-    <string name="stepcount">Skritteller</string>
+    <string name="stepcount">Skritteller:</string>
 </resources>
